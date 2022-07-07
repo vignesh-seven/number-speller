@@ -21,34 +21,62 @@ Return
 numberToWords(myNumber) {
   myNumber := Trim(myNumber, OmitChars := "  `t`r`n.,()/-")
   myNumberInWords := ""
-  ;currentPlace := 1
-  ;numberLength := StrLen(myNumber)
+  ; currentPlace := 1
+  ; numberLength := StrLen(myNumber)
 
-  ten := SubStr(myNumber, -1, 2)
+  ; digits := StrSplit(myNumber)
+
+  ; MsgBox % digits
+
+  
+  ; ten := (StrLen(digits) - 1) . (StrLen(digits))
   hundred := SubStr(myNumber, -2, 1)
   thousand := SubStr(myNumber, -4, 2)
   lakh := SubStr(myNumber, -6, 2)
-  crore := SubStr(myNumber, -8, 2)
+  ;if (SubStr(myNumber, -8, 2) = SubStr(myNumber, -8, 1)) {
 
-  if ((toWords(crore)) AND (StrLen(myNumber) > 7)) {
+  ;}
+
+  if ((StrLen(myNumber) <= 10) AND (StrLen(myNumber) >= 8)) {
+    switch StrLen(myNumber) {
+      case 8: crore := SubStr(myNumber, -9, 1)
+      case 9: crore := SubStr(myNumber, -9, 2)
+      case 10: crore := SubStr(myNumber, -9, 3)
+    }  
     myNumberInWords := myNumberInWords . toWords(crore) . "Crore "
   }
-  if ((toWords(lakh)) AND (StrLen(myNumber) > 5)) {
+
+  if ((toWords(lakh)) AND (StrLen(myNumber) >= 6)) {
+    switch StrLen(myNumber) {
+      case 6: lakh := SubStr(myNumber, -7, 1)
+      case 7: lakh := SubStr(myNumber, -7, 2)
+    }  
     myNumberInWords := myNumberInWords . toWords(lakh) . "Lakh "
   }
-  if ((toWords(thousand)) AND (StrLen(myNumber) > 3)) {
+
+  if ((toWords(thousand)) AND (StrLen(myNumber) >= 4)) {
+    switch StrLen(myNumber) {
+      case 4: thousand := SubStr(myNumber, -5, 1)
+      case 5: thousand := SubStr(myNumber, -5, 2)
+    }  
     myNumberInWords := myNumberInWords . toWords(thousand) . "Thousand "
   }
-  if ((toWords(hundred)) AND (StrLen(myNumber) >= 1)) {
+  
+  if ((toWords(hundred)) AND (StrLen(myNumber) >= 3)) {
+    switch StrLen(myNumber) {
+      case 3: hundred := SubStr(myNumber, -2, 1)
+    }  
     myNumberInWords := myNumberInWords . toWords(hundred) . "Hundred "
   }
+
+  ten := SubStr(myNumber, -1, 2)
 
   myNumberInWords := myNumberInWords . toWords(ten)
   ; Msgbox % doubleDigitWord(currentNumber)
 
   ; MsgBox % "Ten: " . ten "; Hund: " . hundred . "; Thousand: " . thousand . "; Lakh: " . lakh . "; Crore: " . crore
 
-  MsgBox % myNumberInWords
+  Send % myNumberInWords
 
 }
 
@@ -58,7 +86,7 @@ toWords(num) {
   ones := SubStr(num, 2, 1)
   if (StrLen(num) = 1) {
     ones := SubStr(num, 1, 1)
-    tens := "0"
+    tens := ""
   }
 
   ;MsgBox % "m: " . num . "    Ones: " . ones . "    Tens: " . tens
@@ -114,7 +142,6 @@ toWords(num) {
     case "0": theWord := ""
     case "": theWord := ""
   }
-
   switch ones {
     case "1": theWord := theWord . "One "
     case "2": theWord := theWord . "Two "
@@ -128,13 +155,12 @@ toWords(num) {
     case "0": theWord := theWord . ""
     case "": theWord := theWord . ""
   }
-
   Return theWord
 }
 
 
 
-;; Extra keys
+; Extra keys
 F1::
 Reload, Toggle
 Return
